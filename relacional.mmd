@@ -1,0 +1,129 @@
+erDiagram
+
+    PESSOA {
+        INT id_pessoa PK
+        VARCHAR nome_completo
+        CHAR cpf UK
+        VARCHAR email
+        VARCHAR telefone
+        ENUM tipo_pessoa
+    }
+
+    VEICULO {
+        INT id_veiculo PK
+        INT id_proprietario FK
+        VARCHAR placa UK
+        VARCHAR marca
+        VARCHAR modelo
+        VARCHAR cor
+        YEAR ano_fabricacao
+    }
+
+    VAGA {
+        INT id_vaga PK
+        VARCHAR numero_codigo UK
+        VARCHAR localizacao
+        ENUM tipo
+        ENUM status
+    }
+
+    TARIFA {
+        INT id_tarifa PK
+        VARCHAR descricao
+        DECIMAL valor
+        ENUM criterio_cobranca
+    }
+
+    MOVIMENTO_ESTACIONAMENTO {
+        INT id_movimento PK
+        INT id_veiculo FK
+        INT id_vaga FK
+        INT id_tarifa FK
+        DATETIME data_hora_entrada
+        DATETIME data_hora_saida
+        ENUM status
+        DECIMAL valor_cobrado
+    }
+
+    SERVICO {
+        INT id_servico PK
+        VARCHAR nome
+        VARCHAR descricao
+        INT duracao_estimada_min
+        DECIMAL valor
+    }
+
+    ORDEM_LAVAGEM {
+        INT id_ordem PK
+        INT id_cliente FK
+        INT id_veiculo FK
+        INT id_servico FK
+        DATETIME data_hora_entrada
+        ENUM status
+        DECIMAL valor_cobrado
+    }
+
+    FUNCIONARIO_ORDEM_LAVAGEM {
+        INT id_funcionario_ordem PK
+        INT id_funcionario FK
+        INT id_ordem FK
+    }
+
+    PRODUTO {
+        INT id_produto PK
+        VARCHAR nome
+        VARCHAR descricao
+        VARCHAR unidade_medida
+        DECIMAL valor_custo
+        DECIMAL percentual_lucro
+        DECIMAL valor_referencia
+    }
+
+    ESTOQUE {
+        INT id_produto PK, FK
+        DECIMAL quantidade_disponivel
+    }
+
+    ENTRADA_PRODUTO {
+        INT id_entrada PK
+        INT id_produto FK
+        DECIMAL quantidade_recebida
+        DECIMAL valor_unitario_custo
+        DATETIME data_hora_entrada
+    }
+
+    ORDEM_LAVAGEM_PRODUTO {
+        INT id_ordem_produto PK
+        INT id_ordem FK
+        INT id_produto FK
+        DECIMAL quantidade_utilizada
+        DECIMAL valor_utilizacao
+    }
+
+    %% RELACIONAMENTOS
+
+    PESSOA ||--o{ VEICULO : possui
+
+    VEICULO ||--o{ MOVIMENTO_ESTACIONAMENTO : realiza
+
+    VAGA ||--o{ MOVIMENTO_ESTACIONAMENTO : recebe
+
+    TARIFA ||--o{ MOVIMENTO_ESTACIONAMENTO : utiliza
+
+    PESSOA ||--o{ ORDEM_LAVAGEM : cliente
+
+    VEICULO ||--o{ ORDEM_LAVAGEM : possui
+
+    SERVICO ||--o{ ORDEM_LAVAGEM : solicita
+
+    PESSOA ||--o{ FUNCIONARIO_ORDEM_LAVAGEM : funcionario
+
+    ORDEM_LAVAGEM ||--o{ FUNCIONARIO_ORDEM_LAVAGEM : possui
+
+    PRODUTO ||--|| ESTOQUE : possui
+
+    PRODUTO ||--o{ ENTRADA_PRODUTO : recebe
+
+    ORDEM_LAVAGEM ||--o{ ORDEM_LAVAGEM_PRODUTO : utiliza
+
+    PRODUTO ||--o{ ORDEM_LAVAGEM_PRODUTO : utilizado
