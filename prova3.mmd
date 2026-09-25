@@ -1,0 +1,114 @@
+erDiagram
+    PESSOA ||--o{ VEICULO : possui
+    PESSOA ||--o{ ORDEM_LAVAGEM : "solicita (cliente)"
+    PESSOA ||--o{ FUNCIONARIO_ORDEM_LAVAGEM : "executa (funcionario)"
+    VEICULO ||--o{ MOVIMENTO_ESTACIONAMENTO : gera
+    VEICULO ||--o{ ORDEM_LAVAGEM : recebe
+    VAGA ||--o{ MOVIMENTO_ESTACIONAMENTO : ocupa
+    TARIFA ||--o{ MOVIMENTO_ESTACIONAMENTO : define
+    SERVICO ||--o{ ORDEM_LAVAGEM : define
+    ORDEM_LAVAGEM ||--o{ FUNCIONARIO_ORDEM_LAVAGEM : envolve
+    ORDEM_LAVAGEM ||--o{ ORDEM_LAVAGEM_PRODUTO : consome
+    PRODUTO ||--o{ ORDEM_LAVAGEM_PRODUTO : "e utilizado em"
+    PRODUTO ||--|| ESTOQUE : possui
+    PRODUTO ||--o{ ENTRADA_PRODUTO : recebe
+
+    PESSOA {
+        int id_pessoa PK
+        string nome_completo
+        string cpf
+        string email
+        string telefone
+        string tipo_pessoa
+    }
+
+    VEICULO {
+        int id_veiculo PK
+        int id_proprietario FK
+        string placa
+        string marca
+        string modelo
+        string cor
+        int ano_fabricacao
+    }
+
+    VAGA {
+        int id_vaga PK
+        string numero_codigo
+        string localizacao
+        string tipo
+        string status
+    }
+
+    TARIFA {
+        int id_tarifa PK
+        string descricao
+        decimal valor
+        string criterio_cobranca
+    }
+
+    MOVIMENTO_ESTACIONAMENTO {
+        int id_movimento PK
+        int id_veiculo FK
+        int id_vaga FK
+        int id_tarifa FK
+        datetime data_hora_entrada
+        datetime data_hora_saida
+        string status
+        decimal valor_cobrado
+    }
+
+    SERVICO {
+        int id_servico PK
+        string nome
+        string descricao
+        int duracao_estimada_min
+        decimal valor
+    }
+
+    ORDEM_LAVAGEM {
+        int id_ordem PK
+        int id_cliente FK
+        int id_veiculo FK
+        int id_servico FK
+        datetime data_hora_entrada
+        string status
+        decimal valor_cobrado
+    }
+
+    FUNCIONARIO_ORDEM_LAVAGEM {
+        int id_funcionario_ordem PK
+        int id_funcionario FK
+        int id_ordem FK
+    }
+
+    PRODUTO {
+        int id_produto PK
+        string nome
+        string descricao
+        string unidade_medida
+        decimal valor_custo
+        decimal percentual_lucro
+        decimal valor_referencia
+    }
+
+    ESTOQUE {
+        int id_produto PK, FK
+        decimal quantidade_disponivel
+    }
+
+    ENTRADA_PRODUTO {
+        int id_entrada PK
+        int id_produto FK
+        decimal quantidade_recebida
+        decimal valor_unitario_custo
+        datetime data_hora_entrada
+    }
+
+    ORDEM_LAVAGEM_PRODUTO {
+        int id_ordem_produto PK
+        int id_ordem FK
+        int id_produto FK
+        decimal quantidade_utilizada
+        decimal valor_utilizacao
+    }
